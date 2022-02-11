@@ -1,0 +1,1 @@
+import pandas as pd import glob # getting csv files from the folder MyProject path = "C:\\Users\\amit_\\Desktop\\MyProject\\" # read all the files with extension .csv filenames = glob.glob(path + "\*.csv") print('File names:', filenames) # for loop to iterate all csv files for file in filenames: # reading csv files print("\nReading file = ",file) print(pd.read_csv(file)
