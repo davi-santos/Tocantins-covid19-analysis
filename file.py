@@ -1,1 +1,9 @@
-import pandas as pd import glob # getting csv files from the folder MyProject path = "C:\\Users\\amit_\\Desktop\\MyProject\\" # read all the files with extension .csv filenames = glob.glob(path + "\*.csv") print('File names:', filenames) # for loop to iterate all csv files for file in filenames: # reading csv files print("\nReading file = ",file) print(pd.read_csv(file)
+import pandas as pd
+import json
+
+df = pd.read_csv('./data/tocantins.csv')
+df_tocantins = df[~df['municipio'].isna()]
+
+tocantins_regioes = json.load(open('tocantins.json', 'r'))
+
+print(df_tocantins.head())
