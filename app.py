@@ -1,7 +1,9 @@
+from calendar import c
 from pydoc import classname
 from turtle import bgcolor, width
 from numpy import size
 import pandas as pd
+import numpy as np
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
@@ -9,13 +11,20 @@ import plotly.express as px
 import json
 import plotly.graph_objects as go
 
+# ---------- Reading data -------------
+df = pd.read_csv('./data/tocantins.csv')
+df_tocantins = df[~df['municipio'].isna()]
+tocantins_regioes = json.load(open('tocantins.json', 'r'))
+
+DROPDOWN_OPTIONS = 'casosAcumulado casosNovos obitosAcumulado obitosNovos'.split()
+MUNICIPIOS_E_TOCANTINS = np.append(df_tocantins['municipio'].unique(),'Tocantins')
+
+# ---------- Dash app -----------------
+
 app = Dash(__name__, external_stylesheets=[dbc.themes.ZEPHYR])
 
 map_background_color = '#fafaf8'
 
-df = pd.read_csv('./data/tocantins.csv')
-df_tocantins = df[~df['municipio'].isna()]
-tocantins_regioes = json.load(open('tocantins.json', 'r'))
 
 # Figure Tocantins map
 fig = px.choropleth_mapbox(df_tocantins, locations='municipio', 
@@ -39,6 +48,8 @@ pmw = df_tocantins[df_tocantins['municipio'] == 'Palmas'][['casosAcumulado', 'da
 fig2 = px.line(pmw, x='data', y='casosAcumulado')
 
 server = app.server
+
+# ------------- App Layout --------------
 
 app.layout = dbc.Container([
     #Row 1
@@ -73,15 +84,12 @@ app.layout = dbc.Container([
                 ),
                 dcc.Graph(id="choropleth-map", figure=fig, style={'height': '84vh'})],
                 className='border border-alert rounded', style={'background-color': map_background_color}
-            ), width=6
-            
-            # dcc.Loading(
-            #             id="loading-1",
-            #             type="default",
-            #             children=[dcc.Graph(id="choropleth-map", figure=fig, 
-            #                 style={'height': '82vh', 'width': '100vh', 'margin-right': '10px'})]),   
+            ), width=6            
         ),
         dbc.Col([
+            dbc.Row(
+                'some text in here'
+            ),
             dbc.Row([
                 dbc.Col(
                     dbc.Card(
@@ -108,58 +116,50 @@ app.layout = dbc.Container([
                         ], className='bg-danger')
                     ), width=4
                 )
-            ], className='mb-3 mt-2 text-center text-black'),    
-            dbc.Row([
-                dbc.Col(
-                    dbc.Card(
-                        dbc.CardHeader(children=[
-                            html.H5('Percentual Tocantins'),
-                            html.H4('0%'),
-                            html.P('mais casos essa semana.')
-                        ])
-                    ), width=5),
-                dbc.Col(
-                    dbc.Card(
-                        dbc.CardHeader(children=[
-                            html.H5('Percentual Brasil'),
-                            html.H4('0%'),
-                            html.P('mais casos essa semana.')
-                        ])
-                    ), width=5
-                ),
-            ], justify='center',className='mb-2 text-center text-dark'),
+            ], className='mb-3 mt-0  text-center text-black'),
             dbc.Row(children=[
-                dbc.Col(children=[
-                    dcc.Dropdown(
-                        options=[
-                            {'label': 'Casos', 'value':0},
-                            {'label': 'Recuperados', 'value':1},
-                            {'label': 'Óbitos', 'value':1},
-                        ], value='Casos',  clearable=False
-                    )
-                ], width=6),
-                dbc.Col(children=[
-                    dcc.Dropdown(
-                        options=[
-                            {'label': 'Casos', 'value':0},
-                            {'label': 'Recuperados', 'value':1},
-                            {'label': 'Óbitos', 'value':1},
-                        ], value='Casos',  clearable=False
-                    )
-                ], width=6, className='mb-2')
+                dbc.Col(
+                    dcc.Dropdown(options=[{'label': x, 'value': x} for x in MUNICIPIOS_E_TOCANTINS], 
+                        id='drop-cidade', value='Tocantins'),
+                    width=5
+                ),
+                dbc.Col(
+                    dcc.Dropdown(options=[{'label': x, 'value':x} for x in DROPDOWN_OPTIONS], id='drop-caso', value='casosAcumulado'),
+                    width=5
+                ),
             ]),
-            dbc.Row(
+            dbc.Row(children=[
                     dbc.Col(
+                        # dcc.Dropdown(options=[{x: y} for y, x in enumerate(df_tocantins['municipio'].unique())], 
+                        # id='pandas-dropdown-1'),                        
                         dcc.Graph(id='general-graph', figure=fig2),
-                        
-                        className='border border-success mr-2'
+                        width=12,
+                        className='border-0'
                     ),
-            )
+            ])
         ], width=6, className='mr-2 ml-2')
     ],
     className='mt-2')
     
 ], fluid=True)
+
+
+# ------------ callbacks -------
+@app.callback(
+    Output(component_id='general-graph', component_property='figure'),
+    [Input(component_id='drop-cidade', component_property='value'), Input('drop-caso', 'value')]
+)
+def something(city, feature_chosen):
+    figure = {}
+
+    if city=='Tocantins':
+        df_copy = df_tocantins[[feature_chosen,'data']].groupby('data').sum()
+        figure = px.line(df_copy, x=df_copy.index, y=feature_chosen, title=f'{feature_chosen} Tocantins')
+    else:
+        df_copy = df_tocantins[df_tocantins['municipio'] == city][[feature_chosen,'data']].groupby('data').sum()
+        figure = px.line(df_copy, x=df_copy.index, y=feature_chosen, title=f'{feature_chosen} {city}')
+
+    return figure
 
 if __name__ == '__main__':
     app.run_server(debug=True)
