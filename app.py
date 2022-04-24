@@ -13,6 +13,7 @@ import plotly.graph_objects as go
 from dash_svg import Svg, G, Path, Circle
 
 # ---------- READING DATA AND CALCULATING VARIABLES -------------
+#Adding comment
 
 # Read data from csv
 df = pd.read_csv('./data/tocantins.csv')
