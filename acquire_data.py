@@ -16,5 +16,5 @@ for f in files_in_datapath:
 print('... Extracting data from .rar file')
 extract_archive(zip_filename,  outdir=DATA_PATH)
 
-print('... Deleting rar file')
-os.remove(zip_filename)
+#print('... Deleting rar file')
+#os.remove(zip_filename)
