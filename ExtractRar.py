@@ -1,5 +1,5 @@
 import os
-from patoolib import extract_archive #pip install patool
+from patoolib import extract_archive
 
 DIR_ROOT = '.'
 DIR_DATA = 'data'
