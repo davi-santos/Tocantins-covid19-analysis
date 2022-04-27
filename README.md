@@ -1,6 +1,6 @@
 # Tocantins-covid19-analysis
 
-Este repositório apresenta uma análise dos dados de covid-19 no Estado do Tocantins. A análise completa dos dados está disponível no arquivo Tocantins-covid19-analysis.
+Este repositório apresenta uma análise dos dados de covid-19 no Estado do Tocantins. A análise completa dos dados está disponível no arquivo [Tocantins-covid19-analysis](Tocantins-covid19-analysis.ipynb).
 
 ## Requisitos
 
