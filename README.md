@@ -21,4 +21,7 @@ Estas são algumas figuras que você ira encontrar no arquivo [Tocantins-covid19
 
 ![Óbitos nas cidades do Tocantins](./figures/cidadesTOObitosACumuladosMapa.png)
 ![Regioes Saude Casos Tocantins](./figures/RegiesSaudeCasosTempo.png)
-![Cidades Tocantins](./figures/RegioesSaudePopulacao.png.png)
+![Regioes Saude Casos Tocantins](./figures/NovosCasosTOTempo.png)
+![Cidades Tocantins](./figures/RegioesSaudePopulacao.png)
+
+Qualquer coisa, dê um feedback.
