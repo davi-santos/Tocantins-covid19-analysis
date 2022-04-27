@@ -15,8 +15,10 @@ Os dados filtrados para o Estado do Tocantins já estão no diretório "data", n
 Antes de rodar o arquivo main.py, é necessário instalar a biblioteca:
 - pip install patool
 
-# Figuras exemplo
+## Figuras exemplo
 
 Estas são algumas figuras que você ira encontrar no arquivo [Tocantins-covid19-analysis](Tocantins-covid19-analysis.ipynb) (No arquivo, as figuras são interativas e podem ser clicadas para filtrar as informações que você quiser).
 
 ![Óbitos nas cidades do Tocantins](./figures/cidadesTOObitosACumuladosMapa.png)
+![Regioes Saude Casos Tocantins](./RegiesSaudeCasosTempo.png)
+![Cidades Tocantins](./figures/cidadesTOObitosACumuladosMapa.png)
