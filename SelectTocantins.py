@@ -20,4 +20,4 @@ def select_tocantins_files():
         dataframe_tocantins = pd.concat([dataframe_tocantins, df_[df_['estado'] == 'TO']])
         os.remove(csv_file)
 
-    dataframe_tocantins.to_csv(PATH_DATASET_TO, sep=';')
+    dataframe_tocantins.to_csv(PATH_DATASET_TO, sep=';', index=False)
